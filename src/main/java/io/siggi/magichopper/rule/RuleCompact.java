@@ -7,8 +7,10 @@ import org.bukkit.block.Hopper;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RuleCompact extends Rule {
@@ -97,6 +99,25 @@ public class RuleCompact extends Rule {
 				}
 			}
 			break;
+		}
+		boolean foundEmptySlot = false;
+		boolean mustShift = false;
+		List<ItemStack> items = new ArrayList<>(5);
+		for (int i = 0; i < size; i++) {
+			ItemStack item = inventory.getItem(i);
+			if (item != null && item.getType() != Material.AIR) {
+				items.add(item);
+				if (foundEmptySlot)
+					mustShift = true;
+			} else {
+				foundEmptySlot = true;
+			}
+		}
+		if (mustShift) {
+			inventory.clear();
+			for (ItemStack item : items) {
+				inventory.addItem(item);
+			}
 		}
 	}
 
