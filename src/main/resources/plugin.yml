@@ -1,0 +1,10 @@
+name: MagicHopper
+main: io.siggi.magichopper.MagicHopper
+version: ${project.version}
+author: Siggi
+description: MagicHopper filter plugin.
+api-version: 1.13
+permissions:
+  magichopper.use:
+    description: The ability to use MagicHopper.
+    default: op
