@@ -31,7 +31,7 @@ public class MagicHopper extends JavaPlugin {
 	}
 
 	public List<Rule> getRules(Block hopper) {
-		List<Sign> signs = Util.getSignsOnBlock(hopper);
+		List<Sign> signs = Util.orderSigns(Util.getSignsOnBlock(hopper));
 		List<Rule> rules = new ArrayList<>();
 		Consumer<Rule> addRule = (rule) -> {
 			for (Iterator<Rule> it = rules.iterator(); it.hasNext(); ) {

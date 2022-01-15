@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,12 +35,34 @@ public class HopperEventHandler implements Listener {
 	public void signChangeEvent(SignChangeEvent event) {
 		Player player = event.getPlayer();
 		String[] lines = event.getLines();
-		if (ChatColor.stripColor(lines[0]).equalsIgnoreCase("[MH]")) {
+		String firstLine = ChatColor.stripColor(lines[0]).toUpperCase().replace(" ", "");
+		if (firstLine.matches("\\[MH[0-9]*\\]")) {
 			if (!player.hasPermission("magichopper.use")) {
 				event.setLine(0, ChatColor.DARK_RED + "[no permission]");
 				return;
 			}
-			event.setLine(0, ChatColor.BLUE + "[MH]");
+			String numberString = firstLine.substring(3, firstLine.length() - 1);
+			int number = -1;
+			try {
+				number = Integer.parseInt(numberString);
+			} catch (Exception e) {
+			}
+			if (number <= 0) {
+				Block blockOfSign = Util.getBlockSignIsOn(event.getBlock());
+				List<Sign> signsOnBlock = Util.orderSigns(Util.getSignsOnBlock(blockOfSign));
+				number = 1;
+				boolean changed;
+				do {
+					changed = false;
+					for (Sign sign : signsOnBlock) {
+						if (Util.getSignNumber(sign) == number) {
+							changed = true;
+							number += 1;
+						}
+					}
+				} while (changed);
+			}
+			event.setLine(0, ChatColor.BLUE + (number == 1 ? "[MH]" : ("[MH " + number + "]")));
 		}
 	}
 
