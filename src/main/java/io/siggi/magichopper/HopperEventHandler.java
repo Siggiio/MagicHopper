@@ -70,8 +70,9 @@ public class HopperEventHandler implements Listener {
 					continue;
 				int spacePosition = line.indexOf(" ");
 				if (spacePosition == -1) spacePosition = line.length();
-				String rule = line.substring(0, spacePosition);
-				if (!player.hasPermission("magichopper.type." + rule)) {
+				String rule = line.substring(0, spacePosition).toLowerCase();
+				if ((rule.equals("duplicate") && !player.hasPermission("magichopper.type.duplicate"))
+						|| (!player.hasPermission("magichopper.type.standard") && !player.hasPermission("magichopper.type." + rule))) {
 					event.setLine(i, ChatColor.RED + "[!]");
 				}
 			}

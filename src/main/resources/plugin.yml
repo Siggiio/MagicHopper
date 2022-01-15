@@ -32,3 +32,14 @@ permissions:
   magichopper.type.autodrop:
     description: The ability to make droppers auto drop items when they receive them.
     default: op
+  magichopper.type.standard:
+    description: All standard filters except for duplicate.
+    default: op
+    children:
+      magichopper.type.allow: true
+      magichopper.type.block: true
+      magichopper.type.compact: true
+      magichopper.type.count: true
+      magichopper.type.matchfurnace: true
+      magichopper.type.skip: true
+      magichopper.type.autodrop: true
