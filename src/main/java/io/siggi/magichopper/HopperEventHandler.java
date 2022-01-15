@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Dropper;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -90,6 +91,12 @@ public class HopperEventHandler implements Listener {
 				event.setCancelled(true);
 				return;
 			}
+		} else if (targetHolder instanceof Dropper) {
+			Dropper dropper = (Dropper) targetHolder;
+			Block block = dropper.getBlock();
+			if (Util.isAutoDropper(block)) {
+				tickLater(block);
+			}
 		}
 	}
 
@@ -125,11 +132,21 @@ public class HopperEventHandler implements Listener {
 			World world = block.getWorld();
 			if (!world.isChunkLoaded(block.getX() >> 4, block.getZ() >> 4))
 				continue;
-			if (block.getType() != Material.HOPPER)
-				continue;
-			BlockState state = block.getState();
-			Hopper hopper = (Hopper) state;
-			postEvent(block, hopper);
+			switch (block.getType()) {
+				case HOPPER: {
+					Hopper hopper = (Hopper) block.getState();
+					postEvent(block, hopper);
+				}
+				break;
+				case DROPPER: {
+					Dropper dropper = (Dropper) block.getState();
+					if (Util.isAutoDropper(block) && !dropper.getInventory().isEmpty()) {
+						dropper.drop();
+						tickLater(block);
+					}
+				}
+				break;
+			}
 		}
 	}
 
