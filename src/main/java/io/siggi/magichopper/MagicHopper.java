@@ -4,6 +4,7 @@ import io.siggi.magichopper.rule.Rule;
 import io.siggi.magichopper.rule.RuleAllow;
 import io.siggi.magichopper.rule.RuleBlock;
 import io.siggi.magichopper.rule.RuleCompact;
+import io.siggi.magichopper.rule.RuleCount;
 import io.siggi.magichopper.rule.RuleMatchFurnace;
 import io.siggi.magichopper.rule.RuleSkip;
 import org.bukkit.ChatColor;
@@ -91,6 +92,15 @@ public class MagicHopper extends JavaPlugin {
 							}
 						} catch (Exception e) {
 						}
+					}
+					break;
+					case "count": {
+						int count = 0;
+						try {
+							count = Integer.parseInt(ruleData);
+						} catch (Exception e) {
+						}
+						rule = new RuleCount(count, sign, lineIdx);
 					}
 					break;
 				}
