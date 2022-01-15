@@ -64,6 +64,17 @@ public class HopperEventHandler implements Listener {
 				} while (changed);
 			}
 			event.setLine(0, ChatColor.BLUE + (number == 1 ? "[MH]" : ("[MH " + number + "]")));
+			for (int i = 1; i < 4; i++) {
+				String line = event.getLine(i);
+				if (line.trim().isEmpty())
+					continue;
+				int spacePosition = line.indexOf(" ");
+				if (spacePosition == -1) spacePosition = line.length();
+				String rule = line.substring(0, spacePosition);
+				if (!player.hasPermission("magichopper.type." + rule)) {
+					event.setLine(i, ChatColor.RED + "[!]");
+				}
+			}
 		}
 	}
 

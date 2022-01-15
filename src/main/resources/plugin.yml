@@ -8,3 +8,24 @@ permissions:
   magichopper.use:
     description: The ability to use MagicHopper.
     default: op
+  magichopper.type.allow:
+    description: The ability to use the allow filter.
+    default: op
+  magichopper.type.block:
+    description: The ability to use the block filter.
+    default: op
+  magichopper.type.compact:
+    description: The ability to use the compact filter.
+    default: op
+  magichopper.type.count:
+    description: The ability to use the counter.
+    default: op
+  magichopper.type.matchfurnace:
+    description: The ability to use the match furnace filter.
+    default: op
+  magichopper.type.skip:
+    description: The ability to use the skip filter.
+    default: op
+  magichopper.type.autodrop:
+    description: The ability to make droppers auto drop items when they receive them.
+    default: op
