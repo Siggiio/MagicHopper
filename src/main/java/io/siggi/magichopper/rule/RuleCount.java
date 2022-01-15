@@ -17,7 +17,7 @@ public class RuleCount extends Rule {
 	}
 
 	@Override
-	public boolean allowItemToEnter(Block hopperBlock, Hopper hopper, ItemStack item) {
+	public boolean allowItemToLeave(Block hopperBlock, Hopper hopper, ItemStack item) {
 		sign.setLine(line, "count " + (counter + 1));
 		sign.update(true, false);
 		return true;
