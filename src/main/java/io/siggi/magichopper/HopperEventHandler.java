@@ -84,12 +84,16 @@ public class HopperEventHandler implements Listener {
 
 		Inventory source = event.getSource();
 		InventoryHolder sourceHolder = source.getHolder();
+		boolean duplicator = false;
 		if (sourceHolder instanceof Hopper) {
 			Hopper hopper = (Hopper) sourceHolder;
 			Block block = hopper.getBlock();
 			if (!allowItemToLeave(block, hopper, item)) {
 				event.setCancelled(true);
 				return;
+			}
+			if (Util.isDuplicator(block)) {
+				duplicator = true;
 			}
 		}
 
@@ -108,6 +112,11 @@ public class HopperEventHandler implements Listener {
 			if (Util.isAutoDropper(block)) {
 				tickLater(block);
 			}
+		}
+
+		if (!event.isCancelled() && duplicator) {
+			event.setCancelled(true);
+			target.addItem(item);
 		}
 	}
 

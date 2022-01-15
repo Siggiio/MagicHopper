@@ -20,6 +20,9 @@ permissions:
   magichopper.type.count:
     description: The ability to use the counter.
     default: op
+  magichopper.type.duplicate:
+    description: The ability to make a hopper an item duplicator.
+    default: op
   magichopper.type.matchfurnace:
     description: The ability to use the match furnace filter.
     default: op
