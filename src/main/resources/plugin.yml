@@ -23,6 +23,9 @@ permissions:
   magichopper.type.duplicate:
     description: The ability to make a hopper an item duplicator.
     default: op
+  magichopper.type.fuelifempty:
+    description: The ability to use the fuel furnace if empty filter.
+    default: op
   magichopper.type.matchfurnace:
     description: The ability to use the match furnace filter.
     default: op
@@ -40,6 +43,7 @@ permissions:
       magichopper.type.block: true
       magichopper.type.compact: true
       magichopper.type.count: true
+      magichopper.type.fuelifempty: true
       magichopper.type.matchfurnace: true
       magichopper.type.skip: true
       magichopper.type.autodrop: true
