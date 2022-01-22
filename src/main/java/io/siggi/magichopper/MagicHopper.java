@@ -48,10 +48,6 @@ public class MagicHopper extends JavaPlugin {
 			rules.add(rule);
 		};
 		for (Sign sign : signs) {
-			String topLine = sign.getLine(0);
-			String stripped = ChatColor.stripColor(topLine);
-			if (topLine.equals(stripped) || !stripped.equals("[MH]"))
-				continue;
 			int lineIdx = -1;
 			for (String line : sign.getLines()) {
 				lineIdx += 1;
