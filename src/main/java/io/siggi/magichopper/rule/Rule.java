@@ -18,4 +18,6 @@ public abstract class Rule {
 	public Rule mergeWith(Rule rule) {
 		return null;
 	}
+	@Override
+	public abstract String toString();
 }

@@ -29,4 +29,9 @@ public class RuleSkip extends Rule {
 		}
 		return counter == 0;
 	}
+
+	@Override
+	public String toString() {
+		return "Skip " + counter + "/" + total;
+	}
 }

@@ -139,6 +139,11 @@ public class RuleCompact extends Rule {
 		return spacesAvailable >= item.getAmount();
 	}
 
+	@Override
+	public String toString() {
+		return "Compact";
+	}
+
 	private static class CompactableItemOutput {
 		private final int requiredInputs;
 		private final Material output;

@@ -15,4 +15,9 @@ public class RuleBlock extends Rule {
 	public boolean allowItemToEnter(Block hopperBlock, Hopper hopper, ItemStack item) {
 		return !item.getType().name().contains(rule);
 	}
+
+	@Override
+	public String toString() {
+		return "Block: " + this.rule;
+	}
 }

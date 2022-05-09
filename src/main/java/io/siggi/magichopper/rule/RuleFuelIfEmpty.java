@@ -31,4 +31,9 @@ public class RuleFuelIfEmpty extends Rule {
 		}
 		return hopper.getInventory().isEmpty() && item.getType().isFuel();
 	}
+
+	@Override
+	public String toString() {
+		return "Fuel If Empty";
+	}
 }

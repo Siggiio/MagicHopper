@@ -39,4 +39,9 @@ public class RuleMatchFurnace extends Rule {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Match Furnace";
+	}
 }

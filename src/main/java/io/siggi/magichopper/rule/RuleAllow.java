@@ -39,4 +39,14 @@ public class RuleAllow extends Rule {
 		}
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder("Allow: ");
+		for (int i = 0; i < allowedItems.length; i++) {
+			if (i != 0) stringBuilder.append(", ");
+			stringBuilder.append(allowedItems[i]);
+		}
+		return stringBuilder.toString();
+	}
 }
