@@ -63,6 +63,21 @@ public class RuleSlice extends Rule {
 	}
 
 	@Override
+	public boolean allowItemToEnter(Block hopperBlock, Hopper hopper, ItemStack item) {
+		// to ensure the slicer will always have space to slice items up,
+		// don't allow items to enter if there are less than 2 empty spaces
+		int emptySpaces = 0;
+		Inventory inventory = hopper.getInventory();
+		for (int i = 0; i < inventory.getSize(); i++) {
+			ItemStack itemInSlot = inventory.getItem(i);
+			if (itemInSlot == null || itemInSlot.getType() == Material.AIR) {
+				emptySpaces += 1;
+			}
+		}
+		return emptySpaces >= 2;
+	}
+
+	@Override
 	public boolean allowItemToLeave(Block hopperBlock, Hopper hopper, ItemStack item) {
 		return !getMap().containsKey(item.getType());
 	}
