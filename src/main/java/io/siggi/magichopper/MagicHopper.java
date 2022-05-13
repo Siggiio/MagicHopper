@@ -8,6 +8,7 @@ import io.siggi.magichopper.rule.RuleCount;
 import io.siggi.magichopper.rule.RuleFuelIfEmpty;
 import io.siggi.magichopper.rule.RuleMatchFurnace;
 import io.siggi.magichopper.rule.RuleSkip;
+import io.siggi.magichopper.rule.RuleSlice;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -81,6 +82,14 @@ public class MagicHopper extends JavaPlugin {
 					break;
 					case "compact": {
 						rule = new RuleCompact();
+					}
+					break;
+					case "slice": {
+						rule = new RuleSlice(false);
+					}
+					break;
+					case "dice": {
+						rule = new RuleSlice(true);
 					}
 					break;
 					case "skip": {
