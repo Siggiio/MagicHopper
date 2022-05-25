@@ -142,7 +142,7 @@ public class HopperEventHandler implements Listener {
 				public void run() {
 					tickLater();
 				}
-			}).runTask(plugin);
+			}).runTaskLater(plugin, 1L);
 		}
 		tickLater.add(block);
 	}
