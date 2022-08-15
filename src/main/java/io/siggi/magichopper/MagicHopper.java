@@ -9,7 +9,6 @@ import io.siggi.magichopper.rule.RuleFuelIfEmpty;
 import io.siggi.magichopper.rule.RuleMatchFurnace;
 import io.siggi.magichopper.rule.RuleSkip;
 import io.siggi.magichopper.rule.RuleSlice;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.plugin.java.JavaPlugin;
