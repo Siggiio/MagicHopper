@@ -25,9 +25,11 @@ import java.util.Set;
 
 public class HopperEventHandler implements Listener {
 	private final MagicHopper plugin;
+	private final PermissionChecker permissionChecker;
 
-	public HopperEventHandler(MagicHopper plugin) {
+	public HopperEventHandler(MagicHopper plugin, PermissionChecker permissionChecker) {
 		this.plugin = plugin;
+		this.permissionChecker = permissionChecker;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -36,7 +38,7 @@ public class HopperEventHandler implements Listener {
 		String[] lines = event.getLines();
 		String firstLine = ChatColor.stripColor(lines[0]).toUpperCase().replace(" ", "");
 		if (firstLine.matches("\\[MH[0-9]*\\]")) {
-			if (!player.hasPermission("magichopper.use")) {
+			if (!permissionChecker.hasPermission(player, "magichopper.use")) {
 				event.setLine(0, ChatColor.DARK_RED + "[no permission]");
 				return;
 			}
@@ -69,8 +71,8 @@ public class HopperEventHandler implements Listener {
 				int spacePosition = line.indexOf(" ");
 				if (spacePosition == -1) spacePosition = line.length();
 				String rule = line.substring(0, spacePosition).toLowerCase();
-				if ((rule.equals("duplicate") && !player.hasPermission("magichopper.type.duplicate"))
-						|| (!player.hasPermission("magichopper.type.standard") && !player.hasPermission("magichopper.type." + rule))) {
+				if ((rule.equals("duplicate") && !permissionChecker.hasPermission(player, "magichopper.type.duplicate"))
+						|| (!permissionChecker.hasPermission(player, "magichopper.type.standard") && !permissionChecker.hasPermission(player, "magichopper.type." + rule))) {
 					event.setLine(i, ChatColor.RED + "[!]");
 				}
 			}

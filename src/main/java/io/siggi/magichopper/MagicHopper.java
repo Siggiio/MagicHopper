@@ -9,8 +9,11 @@ import io.siggi.magichopper.rule.RuleFuelIfEmpty;
 import io.siggi.magichopper.rule.RuleMatchFurnace;
 import io.siggi.magichopper.rule.RuleSkip;
 import io.siggi.magichopper.rule.RuleSlice;
+import java.io.File;
+import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -22,7 +25,13 @@ public class MagicHopper extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-		getServer().getPluginManager().registerEvents(eventHandler = new HopperEventHandler(this), this);
+		PermissionChecker permissionChecker;
+		if (new File(getDataFolder(), "permissionless").exists()) {
+			permissionChecker = (player, permission) -> player.getGameMode() == GameMode.CREATIVE || !permission.equals("magichopper.type.duplicate");
+		} else {
+			permissionChecker = Player::hasPermission;
+		}
+		getServer().getPluginManager().registerEvents(eventHandler = new HopperEventHandler(this, permissionChecker), this);
 	}
 
 	private static MagicHopper instance = null;
