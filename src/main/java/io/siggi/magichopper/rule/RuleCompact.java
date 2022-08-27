@@ -44,6 +44,8 @@ public class RuleCompact extends Rule {
 
 		compactable.put(Material.BONE_MEAL, new CompactableItemOutput(9, Material.BONE_BLOCK));
 
+		compactable.put(Material.DRIED_KELP, new CompactableItemOutput(9, Material.DRIED_KELP_BLOCK));
+
 		compactable.put(Material.SNOWBALL, new CompactableItemOutput(4, Material.SNOW_BLOCK));
 
 		compactableItems = Collections.unmodifiableMap(compactable);

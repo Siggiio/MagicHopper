@@ -46,6 +46,8 @@ public class RuleSlice extends Rule {
 
 		sliceable.put(Material.BONE_BLOCK, new SliceableItemOutput(9, Material.BONE_MEAL));
 
+		sliceable.put(Material.DRIED_KELP_BLOCK, new SliceableItemOutput(9, Material.DRIED_KELP));
+
 		diceable.putAll(sliceable);
 
 		sliceableItems = Collections.unmodifiableMap(sliceable);
