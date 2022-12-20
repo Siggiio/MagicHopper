@@ -4,9 +4,12 @@ import io.siggi.magichopper.rule.Rule;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Dropper;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -162,8 +165,11 @@ public class HopperEventHandler implements Listener {
 				case DROPPER: {
 					Dropper dropper = (Dropper) block.getState();
 					if (Util.isAutoDropper(block) && !dropper.getInventory().isEmpty()) {
+						long oldQuantities = Util.dropperQuantities(dropper);
 						dropper.drop();
-						tickLater(block);
+						long newQuantities = Util.dropperQuantities(dropper);
+						tickDroppersPointingTo(block);
+						if (oldQuantities != newQuantities) tickLater(block);
 					}
 				}
 				break;
@@ -195,6 +201,21 @@ public class HopperEventHandler implements Listener {
 		List<Rule> rules = plugin.getRules(block);
 		for (Rule rule : rules) {
 			rule.postEvent(block, hopper);
+		}
+	}
+
+	private void tickDroppersPointingTo(Block block) {
+		for (BlockFace face : BlockFace.values()) {
+			if (!face.isCartesian()) continue;
+			BlockFace oppositeFace = face.getOppositeFace();
+			Block otherBlock = block.getRelative(face);
+			BlockState state = otherBlock.getState();
+			if (!(state instanceof Dropper)) continue;
+			Dropper dropper = (Dropper) state;
+			Directional directional = (Directional) dropper.getBlockData();
+			if (directional.getFacing() == oppositeFace) {
+				tickLater(otherBlock);
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Dropper;
 import org.bukkit.block.Sign;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class Util {
 	public static final Set<Material> signPosts;
@@ -155,5 +158,16 @@ public class Util {
 			}
 		}
 		return false;
+	}
+
+	public static long dropperQuantities(Dropper dropper) {
+		Inventory inventory = dropper.getInventory();
+		long output = 0L;
+		for (int i = 0; i < 9; i++) {
+			ItemStack item = inventory.getItem(i);
+			if (item == null || item.getType() == Material.AIR) continue;
+			output |= ((long) item.getAmount()) << (7 * i);
+		}
+		return output;
 	}
 }
