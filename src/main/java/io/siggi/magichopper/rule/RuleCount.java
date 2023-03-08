@@ -6,7 +6,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
 public class RuleCount extends Rule {
-	private final int counter;
+	private int counter;
 	private final Sign sign;
 	private final int line;
 
@@ -18,7 +18,8 @@ public class RuleCount extends Rule {
 
 	@Override
 	public boolean allowItemToLeave(Block hopperBlock, Hopper hopper, ItemStack item) {
-		sign.setLine(line, "count " + (counter + 1));
+		counter += 1;
+		sign.setLine(line, "count " + counter);
 		sign.update(true, false);
 		return true;
 	}

@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
 public class PlayerEventHandler implements Listener {
@@ -29,6 +31,7 @@ public class PlayerEventHandler implements Listener {
 				event.setLine(0, ChatColor.DARK_RED + "[no permission]");
 				return;
 			}
+			plugin.wipeBlockConfig(event.getBlock());
 			String numberString = firstLine.substring(3, firstLine.length() - 1);
 			int number = -1;
 			try {
@@ -64,5 +67,15 @@ public class PlayerEventHandler implements Listener {
 				}
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void blockPlaced(BlockPlaceEvent event) {
+		plugin.wipeBlockConfig(event.getBlock());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void blockBroken(BlockBreakEvent event) {
+		plugin.wipeBlockConfig(event.getBlock());
 	}
 }

@@ -10,8 +10,14 @@ import io.siggi.magichopper.rule.RuleMatchFurnace;
 import io.siggi.magichopper.rule.RuleSkip;
 import io.siggi.magichopper.rule.RuleSlice;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,20 +38,67 @@ public class MagicHopper extends JavaPlugin {
 			permissionChecker = Player::hasPermission;
 		}
 		getServer().getPluginManager().registerEvents(playerEventHandler = new PlayerEventHandler(this, permissionChecker), this);
+		getServer().getPluginManager().registerEvents(worldEventHandler = new WorldEventHandler(this), this);
 		getServer().getPluginManager().registerEvents(eventHandler = new HopperEventHandler(this), this);
 	}
 
 	private static MagicHopper instance = null;
 	private PlayerEventHandler playerEventHandler = null;
+	private WorldEventHandler worldEventHandler = null;
 	private HopperEventHandler eventHandler = null;
 
 	public static void tickLater(Block block) {
 		instance.eventHandler.tickLater(block);
 	}
 
-	public List<Rule> getRules(Block hopper) {
+	private final BlockFace[] allFaces = new BlockFace[] {
+		BlockFace.UP,
+		BlockFace.DOWN,
+		BlockFace.NORTH,
+		BlockFace.EAST,
+		BlockFace.SOUTH,
+		BlockFace.WEST
+	};
+	private final Map<Chunk, Map<Block,BlockConfig>> blockConfigs = new HashMap<>();
+	private final Function<Chunk,HashMap<Block,BlockConfig>> chunkMapMaker = chunk -> new HashMap<>();
+	private final Function<Block,BlockConfig> blockConfigMaker = this::getBlockConfigFromSigns;
+
+	public BlockConfig getBlockConfig(Block block) {
+		Map<Block, BlockConfig> chunkMap = blockConfigs.computeIfAbsent(block.getChunk(), chunkMapMaker);
+		return chunkMap.computeIfAbsent(block, blockConfigMaker);
+	}
+
+	private void doWipeBlockConfig(Block block) {
+		Map<Block, BlockConfig> chunkConfigMap = blockConfigs.get(block.getChunk());
+		if (chunkConfigMap == null) return;
+		chunkConfigMap.remove(block);
+		if (chunkConfigMap.isEmpty()) {
+			blockConfigs.remove(block.getChunk());
+		}
+	}
+
+	public void wipeBlockConfig(Block block) {
+		doWipeBlockConfig(block);
+		for (BlockFace face : allFaces) {
+			doWipeBlockConfig(block.getRelative(face));
+		}
+	}
+
+	public void wipeChunkConfig(Chunk chunk) {
+		blockConfigs.remove(chunk);
+	}
+
+	public void wipeWorldConfig(World world) {
+		for (Chunk chunk : world.getLoadedChunks()) {
+			wipeChunkConfig(chunk);
+		}
+	}
+
+	private BlockConfig getBlockConfigFromSigns(Block hopper) {
 		List<Sign> signs = Util.orderSigns(Util.getSignsOnBlock(hopper));
 		List<Rule> rules = new ArrayList<>();
+		boolean duplicator = false;
+		boolean autoDropper = false;
 		Consumer<Rule> addRule = (rule) -> {
 			for (Iterator<Rule> it = rules.iterator(); it.hasNext(); ) {
 				Rule existingRule = it.next();
@@ -123,11 +176,17 @@ public class MagicHopper extends JavaPlugin {
 						rule = new RuleCount(count, sign, lineIdx);
 					}
 					break;
+					case "duplicate":
+						duplicator = true;
+						break;
+					case "autodrop":
+						autoDropper = true;
+						break;
 				}
 				if (rule != null)
 					addRule.accept(rule);
 			}
 		}
-		return rules;
+		return new BlockConfig(rules, duplicator, autoDropper);
 	}
 }

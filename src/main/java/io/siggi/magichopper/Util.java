@@ -134,26 +134,4 @@ public class Util {
 		});
 		return signs;
 	}
-
-	public static boolean isDuplicator(Block block) {
-		List<Sign> signsOnBlock = orderSigns(getSignsOnBlock(block));
-		for (Sign sign : signsOnBlock) {
-			for (String line : sign.getLines()) {
-				if (line.equals("duplicate"))
-					return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean isAutoDropper(Block block) {
-		List<Sign> signsOnBlock = orderSigns(getSignsOnBlock(block));
-		for (Sign sign : signsOnBlock) {
-			for (String line : sign.getLines()) {
-				if (line.equals("autodrop"))
-					return true;
-			}
-		}
-		return false;
-	}
 }

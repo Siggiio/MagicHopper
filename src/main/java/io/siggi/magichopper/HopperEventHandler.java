@@ -40,11 +40,12 @@ public class HopperEventHandler implements Listener {
 		if (sourceHolder instanceof Hopper) {
 			Hopper hopper = (Hopper) sourceHolder;
 			Block block = hopper.getBlock();
-			if (!allowItemToLeave(block, hopper, item)) {
+			BlockConfig config = plugin.getBlockConfig(block);
+			if (!allowItemToLeave(config, block, hopper, item)) {
 				event.setCancelled(true);
 				return;
 			}
-			if (Util.isDuplicator(block)) {
+			if (config.isDuplicator()) {
 				duplicator = true;
 			}
 		}
@@ -54,14 +55,16 @@ public class HopperEventHandler implements Listener {
 		if (targetHolder instanceof Hopper) {
 			Hopper hopper = (Hopper) targetHolder;
 			Block block = hopper.getBlock();
-			if (!allowItemToEnter(block, hopper, item)) {
+			BlockConfig config = plugin.getBlockConfig(block);
+			if (!allowItemToEnter(config, block, hopper, item)) {
 				event.setCancelled(true);
 				return;
 			}
 		} else if (targetHolder instanceof Dropper) {
 			Dropper dropper = (Dropper) targetHolder;
 			Block block = dropper.getBlock();
-			if (Util.isAutoDropper(block)) {
+			BlockConfig config = plugin.getBlockConfig(block);
+			if (config.isAutoDropper()) {
 				tickLater(block);
 			}
 		}
@@ -80,7 +83,8 @@ public class HopperEventHandler implements Listener {
 			return;
 		Hopper hopper = (Hopper) holder;
 		Block block = hopper.getBlock();
-		if (!allowItemToEnter(block, hopper, event.getItem().getItemStack())) {
+		BlockConfig config = plugin.getBlockConfig(block);
+		if (!allowItemToEnter(config, block, hopper, event.getItem().getItemStack())) {
 			event.setCancelled(true);
 		}
 	}
@@ -104,15 +108,16 @@ public class HopperEventHandler implements Listener {
 			World world = block.getWorld();
 			if (!world.isChunkLoaded(block.getX() >> 4, block.getZ() >> 4))
 				continue;
+			BlockConfig config = plugin.getBlockConfig(block);
 			switch (block.getType()) {
 				case HOPPER: {
 					Hopper hopper = (Hopper) block.getState();
-					postEvent(block, hopper);
+					postEvent(config, block, hopper);
 				}
 				break;
 				case DROPPER: {
 					Dropper dropper = (Dropper) block.getState();
-					if (Util.isAutoDropper(block) && !dropper.getInventory().isEmpty()) {
+					if (config.isAutoDropper() && !dropper.getInventory().isEmpty()) {
 						dropper.drop();
 						tickLater(block);
 					}
@@ -122,8 +127,8 @@ public class HopperEventHandler implements Listener {
 		}
 	}
 
-	private boolean allowItemToEnter(Block block, Hopper hopper, ItemStack itemStack) {
-		List<Rule> rules = plugin.getRules(block);
+	private boolean allowItemToEnter(BlockConfig config, Block block, Hopper hopper, ItemStack itemStack) {
+		List<Rule> rules = config.getRules();
 		for (Rule rule : rules) {
 			if (!rule.allowItemToEnter(block, hopper, itemStack))
 				return false;
@@ -132,8 +137,8 @@ public class HopperEventHandler implements Listener {
 		return true;
 	}
 
-	private boolean allowItemToLeave(Block block, Hopper hopper, ItemStack itemStack) {
-		List<Rule> rules = plugin.getRules(block);
+	private boolean allowItemToLeave(BlockConfig config, Block block, Hopper hopper, ItemStack itemStack) {
+		List<Rule> rules = config.getRules();
 		for (Rule rule : rules) {
 			if (!rule.allowItemToLeave(block, hopper, itemStack))
 				return false;
@@ -142,8 +147,8 @@ public class HopperEventHandler implements Listener {
 		return true;
 	}
 
-	private void postEvent(Block block, Hopper hopper) {
-		List<Rule> rules = plugin.getRules(block);
+	private void postEvent(BlockConfig config, Block block, Hopper hopper) {
+		List<Rule> rules = config.getRules();
 		for (Rule rule : rules) {
 			rule.postEvent(block, hopper);
 		}
