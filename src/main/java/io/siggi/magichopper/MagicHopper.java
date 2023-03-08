@@ -31,10 +31,12 @@ public class MagicHopper extends JavaPlugin {
 		} else {
 			permissionChecker = Player::hasPermission;
 		}
-		getServer().getPluginManager().registerEvents(eventHandler = new HopperEventHandler(this, permissionChecker), this);
+		getServer().getPluginManager().registerEvents(playerEventHandler = new PlayerEventHandler(this, permissionChecker), this);
+		getServer().getPluginManager().registerEvents(eventHandler = new HopperEventHandler(this), this);
 	}
 
 	private static MagicHopper instance = null;
+	private PlayerEventHandler playerEventHandler = null;
 	private HopperEventHandler eventHandler = null;
 
 	public static void tickLater(Block block) {
