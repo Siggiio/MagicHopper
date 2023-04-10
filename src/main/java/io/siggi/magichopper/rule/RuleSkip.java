@@ -6,7 +6,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
 public class RuleSkip extends Rule {
-	private final int counter;
+	private int counter;
 	private final int total;
 	private final Sign sign;
 	private final int line;
@@ -21,10 +21,12 @@ public class RuleSkip extends Rule {
 	@Override
 	public boolean allowItemToEnter(Block hopperBlock, Hopper hopper, ItemStack item) {
 		if (counter >= total) {
+			counter = 0;
 			sign.setLine(line, "skip 0/" + total);
 			sign.update(true, false);
 		} else {
-			sign.setLine(line, "skip " + (counter + 1) + "/" + total);
+			counter += 1;
+			sign.setLine(line, "skip " + counter + "/" + total);
 			sign.update(true, false);
 		}
 		return counter == 0;
