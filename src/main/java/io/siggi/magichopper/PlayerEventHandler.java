@@ -40,6 +40,13 @@ public class PlayerEventHandler implements Listener {
 			}
 			if (number <= 0) {
 				Block blockOfSign = Util.getBlockSignIsOn(event.getBlock());
+				if (blockOfSign == null) {
+					event.setLine(0, ChatColor.DARK_RED + "[fail]");
+					event.setLine(1, "Hanging");
+					event.setLine(2, "signs not");
+					event.setLine(3, "supported");
+					return;
+				}
 				List<Sign> signsOnBlock = Util.orderSigns(Util.getSignsOnBlock(blockOfSign));
 				number = 1;
 				boolean changed;

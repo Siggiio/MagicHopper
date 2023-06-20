@@ -29,6 +29,8 @@ public class Util {
 				continue;
 			if (name.endsWith("_wall_sign")) {
 				walls.add(material);
+			} else if (name.endsWith("_hanging_sign")) {
+				// do nothing for now
 			} else if (name.endsWith("_sign")) {
 				posts.add(material);
 			}
